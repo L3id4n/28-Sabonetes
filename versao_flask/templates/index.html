@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>Assistente Agrícola</title>
+</head>
+<body>
+
+    <div class="cabecalho">
+        <img src="{{ url_for('static', filename='logo.png') }}" class="logo">
+
+        <h1>Assistente Agrícola</h1>
+    </div>
+
+        <form action="/resultado" method="POST">
+
+            <p>Temperatura média (°C)</p>
+            <input type="number" step="0.1" name="temperatura" required>
+
+            <p>Previsão de chuva (mm)</p>
+            <input type="number" step="0.1" name="chuva" required>
+
+            <p>pH do solo</p>
+            <input type="number" step="0.1" name="ph" required>
+
+            <p>Solo fértil?</p>
+            <select name="fertilidade">
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+            </select>
+
+            <p>Drenagem</p>
+            <select name="drenagem">
+                <option value="boa">Boa</option>
+                <option value="ruim">Ruim</option>
+            </select>
+
+            <p>Nível de nutrientes</p>
+            <select name="nutrientes">
+                <option value="alto">Alto</option>
+                <option value="medio">Médio</option>
+                <option value="baixo">Baixo</option>
+            </select>
+
+            <p>Clima</p>
+            <select name="clima">
+                <option value="frio">Frio</option>
+                <option value="ameno">Ameno</option>
+                <option value="quente">Quente</option>
+            </select>
+
+            <br><br>
+
+            <button type="submit">
+                Analisar Região
+            </button>
+    
+        </form>
+    </div>
+
+</body>
+</html>
