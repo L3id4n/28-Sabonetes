@@ -5,10 +5,8 @@ soja = {
     "chuva_ciclo_max": 800,
     "ph_solo_min": 5.5,
     "ph_solo_max": 6.5,
-    "tempo_min": 100,
-    "tempo_max": 160,
-    "drenagem": "bom"
-}                                               
+    "drenagem": "boa"
+}
 
 milho = {
     "temperatura_min": 18,
@@ -16,10 +14,8 @@ milho = {
     "chuva_ciclo_min": 500,
     "chuva_ciclo_max": 800,
     "ph_solo_min": 5.5,
-    "ph_solo_max": 7,
-    "tempo_min": 90,
-    "tempo_max": 150,
-    "nutrientes": "alto"    
+    "ph_solo_max": 7.0,
+    "nutrientes": "alto"
 }
 
 trigo = {
@@ -29,76 +25,87 @@ trigo = {
     "chuva_ciclo_max": 650,
     "ph_solo_min": 5.5,
     "ph_solo_max": 6.5,
-    "tempo_min": 110,
-    "tempo_max": 150,
-    "clima": "ameno"     
+    "clima": "ameno"
 }
 
-plantas = input("Digite qual planta deseja plantar [milho/soja/trigo]: ")
 
-if plantas == "soja":
-        temperatura = float(input("Temperatura média (°C): "))
-        chuva = float(input("Previsão de chuva no ciclo (mm): "))
-        ph = float(input("pH do solo: "))
-        fertilidade = input("O solo é fértil? [sim/não]: ").lower()
-        
-        pontos = 0
-        
-        if soja["temperatura_min"] <= temperatura <= soja["temperatura_max"]:
-            pontos += 25
-        
-        if soja["chuva_ciclo_min"] <= chuva <= soja["chuva_ciclo_max"]:
-            pontos += 25
-            
-        if soja["ph_solo_min"] <= ph <= soja["ph_solo_max"]:
-            pontos += 25
-        
-        if fertilidade == "sim":
-            pontos += 25
-            
-        print(f"Compatibilidade: {pontos}%")
+def calcular_pontos(planta, temperatura, chuva, ph,
+                     fertilidade, drenagem,
+                     nutrientes, clima):
 
-if plantas == "milho":
-        temperatura = float(input("Temperatura média (°C): "))
-        chuva = float(input("Previsão de chuva no ciclo (mm): "))
-        ph = float(input("pH do solo: "))
-        fertilidade = input("O solo é fértil? [sim/não]: ").lower()
-        
-        pontos = 0
-        
-        if milho["temperatura_min"] <= temperatura <= milho["temperatura_max"]:
-            pontos += 25
-        
-        if milho["chuva_ciclo_min"] <= chuva <= milho["chuva_ciclo_max"]:
-            pontos += 25
-            
-        if milho["ph_solo_min"] <= ph <= milho["ph_solo_max"]:
-            pontos += 25
-        
-        if fertilidade == "sim":
-            pontos += 25
-            
-        print(f"Compatibilidade: {pontos}%")
-            
-if plantas == "trigo":
-        temperatura = float(input("Temperatura média (°C): "))
-        chuva = float(input("Previsão de chuva no ciclo (mm): "))
-        ph = float(input("pH do solo: "))
-        fertilidade = input("O solo é fértil? [sim/não]: ").lower()
-        
-        pontos = 0
-        
-        if trigo["temperatura_min"] <= temperatura <= trigo["temperatura_max"]:
-            pontos += 25
-        
-        if trigo["chuva_ciclo_min"] <= chuva <= trigo["chuva_ciclo_max"]:
-            pontos += 25
-            
-        if trigo["ph_solo_min"] <= ph <= trigo["ph_solo_max"]:
-            pontos += 25
-        
-        if fertilidade == "sim":
-            pontos += 25
-            
-        print(f"Compatibilidade: {pontos}%")
+    pontos = 0
 
+    if planta["temperatura_min"] <= temperatura <= planta["temperatura_max"]:
+        pontos += 20
+
+    if planta["chuva_ciclo_min"] <= chuva <= planta["chuva_ciclo_max"]:
+        pontos += 20
+
+    if planta["ph_solo_min"] <= ph <= planta["ph_solo_max"]:
+        pontos += 20
+
+    if fertilidade == "sim":
+        pontos += 20
+
+    if "drenagem" in planta:
+        if drenagem == planta["drenagem"]:
+            pontos += 20
+
+    elif "nutrientes" in planta:
+        if nutrientes == planta["nutrientes"]:
+            pontos += 20
+
+    elif "clima" in planta:
+        if clima == planta["clima"]:
+            pontos += 20
+
+    return pontos
+
+
+print("=== Assistente Agrícola ===")
+
+temperatura = float(input("Temperatura média (°C): "))
+chuva = float(input("Previsão de chuva no ciclo (mm): "))
+ph = float(input("pH do solo: "))
+fertilidade = input("Solo fértil? [sim/não]: ").lower()
+
+drenagem = input("Drenagem do solo [ruim/boa]: ").lower()
+nutrientes = input("Nível de nutrientes [baixo/medio/alto]: ").lower()
+clima = input("Clima da região [frio/ameno/quente]: ").lower()
+
+
+resultado_soja = calcular_pontos(
+    soja, temperatura, chuva, ph,
+    fertilidade, drenagem,
+    nutrientes, clima
+)
+
+resultado_milho = calcular_pontos(
+    milho, temperatura, chuva, ph,
+    fertilidade, drenagem,
+    nutrientes, clima
+)
+
+resultado_trigo = calcular_pontos(
+    trigo, temperatura, chuva, ph,
+    fertilidade, drenagem,
+    nutrientes, clima
+)
+
+
+print("\n=== RESULTADOS ===")
+print(f"Soja: {resultado_soja}%")
+print(f"Milho: {resultado_milho}%")
+print(f"Trigo: {resultado_trigo}%")
+
+
+resultados = {
+    "Soja": resultado_soja,
+    "Milho": resultado_milho,
+    "Trigo": resultado_trigo
+}
+
+melhor_planta = max(resultados, key=resultados.get)
+
+print(f"\n Melhor opção: {melhor_planta}")
+print(f"Compatibilidade: {resultados[melhor_planta]}%")
